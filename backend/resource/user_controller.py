@@ -1,26 +1,39 @@
-import hashlib
+import base64
+import json
+from service.Pessoa_service import PessoaService
 
-def users():
-    return [
-        '424a915b720e1e282004d4a3db7af3bb',
-        'd374bafcbb8b166013ef8cc81d74f67b',
-        '99e25fc40d47d8490bf5c7c2e6980d3d',
-        'acb9135314ca86d4ce0518c33e08132b'
-    ]
 
-def encode_user(user, password):
-    hash_object = hashlib.md5(
-        f'{user}:{password}'.encode()
+CHAR_CODE = 'utf-8'
+
+
+def encode_user(record):
+    """
+    Transforma dados de usuário
+    p/ login numa string base64
+    """
+    return base64.b64encode(
+        bytes(str(record), CHAR_CODE)
+    ).decode(CHAR_CODE)
+
+def decode_user(access_key):
+    """
+    Retorna dados de usuário
+    associados à access_key
+    """
+    user_id = base64.b64decode(
+        bytes(access_key, CHAR_CODE)
+    ).decode(CHAR_CODE)
+    return json.loads(
+        user_id.replace("'", '"')
     )
-    return hash_object.hexdigest()
 
 def valid_user(user, password):
-    #------- initial examples --------
-    #       valid_user('development', '123')
-    #       valid_user('testing', '456')
-    #       valid_user('approval', '789')
-    #       valid_user('production', 'ABC')
-    #---------------------------------
-    user_id = encode_user(user, password)
-    found = user_id in users()
-    return found, user_id
+    service = PessoaService()
+    msg, status_code = service.find({
+        'email': user,
+        'senha': password
+    })
+    if status_code == 404:
+        return None
+    data = msg['data']
+    return encode_user(data)

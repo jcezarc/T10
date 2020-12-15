@@ -10,5 +10,3 @@ class PessoaModel(Schema):
     email = Str()
     senha = Str()
     nivel = Integer()
-
-

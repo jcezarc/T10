@@ -1,11 +1,21 @@
 import json
 from flask_restful import Resource
 from flask import request, jsonify
-
-from flask_jwt_extended import jwt_required
+from flask_jwt_extended import (
+    get_jwt_identity,
+    jwt_required
+)
 from service.Evento_service import EventoService
+from resource.user_controller import decode_user
 
 class AllEvento(Resource):
+
+    @staticmethod
+    def current_user():
+        """
+        Obtém os dados do usuário autenticado
+        """
+        return decode_user(get_jwt_identity())
 
     @jwt_required
     def get(self):
@@ -15,8 +25,10 @@ class AllEvento(Resource):
         #Read
         """
         service = EventoService()
-        return service.find(request.args)
-    
+        return service.find(
+            self.current_user()
+        )
+
     @jwt_required
     def post(self):
         """
@@ -25,16 +37,6 @@ class AllEvento(Resource):
         #Write
         """
         req_data = request.get_json()
+        user = self.current_user()
         service = EventoService()
-        return service.insert(req_data)
-
-    @jwt_required
-    def put(self):
-        """
-        Updates a record in Evento
-
-        #Write
-        """
-        req_data = json.loads(request.data.decode("utf8"))
-        service = EventoService()
-        return service.update(req_data)
+        return service.insert(req_data, user)
