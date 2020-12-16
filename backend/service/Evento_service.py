@@ -54,6 +54,7 @@ class EventoService:
             msg, status_code = service.insert(solicitacao)
             if status_code == 400:
                 return msg, status_code
+        json_data['usuario'] = user['cpf_cnpf']
         errors = self.table.insert(json_data)
         if errors:
             return resp_error(errors)

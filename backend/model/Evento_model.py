@@ -1,3 +1,4 @@
+import uuid
 from marshmallow import Schema
 from marshmallow.fields import Str, Nested, List, Integer, Float, Date, Boolean
 from model.Solicitacao_model import SolicitacaoModel
@@ -19,7 +20,11 @@ NOME_SITUACAO = {
 
 
 class EventoModel(Schema):
-    id = Str(primary_key=True, default="000", required=True)
+    id = Str(
+        primary_key=True,
+        default=str(uuid.uuid4()),
+        required=True
+    )
     dt_evento = Date(default=datetime.today())
     situacao = Integer()
     solicitacao = Nested(SolicitacaoModel)
