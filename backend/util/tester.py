@@ -47,25 +47,3 @@ class Tester:
         service = self.callback()
         status_code = service.insert({})[1]
         assert status_code == 400
-
-    def update_success(self, expected):
-
-        def equal_values(data, expected):
-            for key, value in expected.items():
-                if data[key] != value:
-                    return False
-            return True
-        service = self.callback()
-        data = add_record(service)[0]['data']
-        for key, value in expected.items():
-            data[key] = value
-        assert service.update(data)[1] == 200
-        key = service.table.pk_fields[0]
-        msg, status_code = service.find(None, data[key])
-        assert status_code == 200
-        data = msg['data']
-        assert equal_values(data, expected)
-
-    def update_failure(self):
-        service = self.callback()
-        assert service.update({})[1] == 400

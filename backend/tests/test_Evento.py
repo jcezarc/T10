@@ -2,30 +2,32 @@ import sys
 sys.path.append('..')
 from service.Evento_service import EventoService
 from model.Evento_model import EventoModel, PK_DEFAULT_VALUE
-from util.db.fake_table import FakeTable
-from util.messages import resp_ok, resp_not_found
+from util.db.lite_table import LiteTable
+from util.tester import Tester
+
+
+def get_service():
+    table = LiteTable(
+        EventoModel, {
+            'database': Tester.temp_file()
+            #  'database': ':memory:'
+        }
+    )
+    table.create_table()
+    return EventoService(table)
 
 def test_find_success():
-    table = FakeTable(EventoModel)
-    record = table.default_values()
-    table.insert(record)
-    service = EventoService(table)
-    status_code = service.find(None, PK_DEFAULT_VALUE)[1]
-    assert status_code == 200
+    test = Tester(get_service)
+    test.find_success()
 
 def test_find_failure():
-    service = EventoService(FakeTable(EventoModel))
-    status_code = service.find(None, PK_DEFAULT_VALUE)[1]
-    assert status_code == 404
+    test = Tester(get_service)
+    test.find_failure()
 
 def test_insert_success():
-    table = FakeTable(EventoModel)
-    service = EventoService(table)
-    record = table.default_values()
-    status_code = service.insert(record)[1]
-    assert status_code == 201
+    test = Tester(get_service)
+    test.insert_success()
 
 def test_insert_failure():
-    service = EventoService(FakeTable(EventoModel))
-    status_code = service.insert({})[1]
-    assert status_code == 400
+    test = Tester(get_service)
+    test.insert_failure()
