@@ -30,21 +30,15 @@ class PessoaService:
             return resp_not_found()
         return resp_get_ok(found)
 
-    def insert(self, json):
-        logging.info('New record write in Pessoa')
-        errors = self.table.insert(json)
+
+    def insert(self, json_data, user):
+        logging.info('Gravando nova Pessoa')
+
+        def get_level(record):
+            return record.get('nivel', 1)
+        if get_level(json_data) > get_level(user):
+            return resp_error('Você não pode criar um usuário com nível maior que o seu.')
+        errors = self.table.insert(json_data)
         if errors:
             return resp_error(errors)
         return resp_post_ok()
-
-    def update(self, json):
-        logging.info('Changing record of Pessoa ...')
-        errors = self.table.update(json)
-        if errors:
-            return resp_error(errors)
-        return resp_ok("Record changed OK!")
-        
-    def delete(self, cpf_cnpj):
-        logging.info('Removing record of Pessoa ...')
-        self.table.delete(cpf_cnpj)
-        return resp_ok("Deleted record OK!")

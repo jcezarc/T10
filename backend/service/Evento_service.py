@@ -34,10 +34,7 @@ class EventoService:
         return resp_get_ok(found)
 
     def insert(self, json_data, user):
-        logging.info('New record write in Evento')
-        errors = self.table.insert(json_data)
-        if errors:
-            return resp_error(errors)
+        logging.info('Gravando novo Evento')
         new_level = int(json_data.get('situacao', 1))
         cur_level = int(user['nivel'])
         if new_level > cur_level:
@@ -45,8 +42,19 @@ class EventoService:
                 NOME_SITUACAO[new_level]
             ))
         solicitacao = json_data.get('solicitacao')
-        if new_level == NIVEL_SOLICITAR and isinstance(solicitacao, dict):
+        if new_level > NIVEL_SOLICITAR:
+            found = self.table.find_one({
+                'solicitacao': solicitacao
+            })
+            if not found:
+                return resp_error('Não existe nada para '+NOME_SITUACAO[new_level])
+        elif isinstance(solicitacao, dict):
             # --- No evento de fazer solicitação, grava os detalhes na tabela Solicitacao
             service = SolicitacaoService()
-            service.insert(solicitacao)
+            msg, status_code = service.insert(solicitacao)
+            if status_code == 400:
+                return msg, status_code
+        errors = self.table.insert(json_data)
+        if errors:
+            return resp_error(errors)
         return resp_post_ok()

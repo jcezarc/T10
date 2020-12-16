@@ -4,4 +4,17 @@ CREATE TABLE Pessoa(
     email VARCHAR(100),
     senha VARCHAR(100),
     nivel INT
+);
+INSERT INTO Pessoa(
+    cpf_cnpj,
+    nome,
+    email,
+    senha,
+    nivel
+) VALUES(
+    '11111111111',
+    'Admin',
+    'admin@desafio-t10.com',
+    '!5q%IYk0Hy',
+    5
 )

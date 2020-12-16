@@ -8,7 +8,7 @@ from flask_jwt_extended import (
 from service.Evento_service import EventoService
 from resource.user_controller import decode_user
 
-class AllEvento(Resource):
+class EventoResource(Resource):
 
     @staticmethod
     def current_user():

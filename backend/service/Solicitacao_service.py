@@ -36,15 +36,3 @@ class SolicitacaoService:
         if errors:
             return resp_error(errors)
         return resp_post_ok()
-
-    def update(self, json):
-        logging.info('Changing record of Solicitacao ...')
-        errors = self.table.update(json)
-        if errors:
-            return resp_error(errors)
-        return resp_ok("Record changed OK!")
-        
-    def delete(self, id):
-        logging.info('Removing record of Solicitacao ...')
-        self.table.delete(id)
-        return resp_ok("Deleted record OK!")

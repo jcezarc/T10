@@ -5,7 +5,7 @@ from flask import request, jsonify
 from flask_jwt_extended import jwt_required
 from service.Pessoa_service import PessoaService
 
-class AllPessoa(Resource):
+class PessoaResource(Resource):
 
     @jwt_required
     def get(self):
@@ -27,14 +27,3 @@ class AllPessoa(Resource):
         req_data = request.get_json()
         service = PessoaService()
         return service.insert(req_data)
-
-    @jwt_required
-    def put(self):
-        """
-        Updates a record in Pessoa
-
-        #Write
-        """
-        req_data = json.loads(request.data.decode("utf8"))
-        service = PessoaService()
-        return service.update(req_data)
