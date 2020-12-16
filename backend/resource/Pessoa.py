@@ -10,9 +10,11 @@ class PessoaResource(Resource):
     @jwt_required
     def get(self):
         """
-        Returns all records from the table Pessoa
+        Traz uma lista de pessoas, que obedece
+        os critérios passados na query
+        Ex.: **.../T10/Pessoa?nome=Silva&nivel=3**
 
-        #Read
+        #Consulta
         """
         service = PessoaService()
         return service.find(request.args)
@@ -20,9 +22,10 @@ class PessoaResource(Resource):
     @jwt_required
     def post(self):
         """
-        Write a new record in Pessoa
+        Grava uma nova Pessoa com nível
+        inferior ao do usuário atual.
 
-        #Write
+        #Gravação
         """
         req_data = request.get_json()
         service = PessoaService()

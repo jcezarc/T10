@@ -87,6 +87,12 @@ def get_api():
 
 @APP.route('/login', methods=['POST'])
 def login():
+    '''
+    Gera um token para o usuário
+    devidamente identificado
+
+    #Acesso
+    '''
     user = request.json.get('user')
     password = request.json.get('password')
     found = valid_user(user, password)

@@ -20,9 +20,10 @@ class EventoResource(Resource):
     @jwt_required
     def get(self):
         """
-        Returns all records from the table Evento
+        Retorna todos os eventos que
+        o usuário atual tem acesso
 
-        #Read
+        #Consulta
         """
         service = EventoService()
         return service.find(
@@ -32,9 +33,16 @@ class EventoResource(Resource):
     @jwt_required
     def post(self):
         """
-        Write a new record in Evento
-
-        #Write
+        Grava um novo Evento
+        `Regras`: 
+        - O usuário só pode
+        gravar eventos permitidos para o
+        seu nível;
+        - Aprovar, rejeitar e cancelar somente
+        são possíveis para solicitações já
+        efetuadas.
+        
+        #Gravação
         """
         req_data = request.get_json()
         user = self.current_user()
