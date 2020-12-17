@@ -85,7 +85,7 @@ def get_api():
     return jsonify(generator.content)
 
 
-@APP.route('/login', methods=['POST'])
+@APP.route(f'{BASE_PATH}/login', methods=['POST'])
 def login():
     '''
     Gera um token para o usuário
@@ -93,8 +93,9 @@ def login():
 
     #Acesso
     '''
-    user = request.json.get('user')
-    password = request.json.get('password')
+    req_data = request.get_json()
+    user = req_data.get('user')
+    password = req_data.get('password')
     found = valid_user(user, password)
     if not found:
         return "Usuário inválido", 403

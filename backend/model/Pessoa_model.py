@@ -7,6 +7,6 @@ PK_DEFAULT_VALUE = "000"
 class PessoaModel(Schema):
     cpf_cnpj = Str(primary_key=True, default=PK_DEFAULT_VALUE, required=True)
     nome = Str()
-    email = Str()
-    senha = Str()
+    email = Str(required=True)
+    senha = Str(required=True)
     nivel = Integer()

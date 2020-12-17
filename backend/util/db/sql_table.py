@@ -69,10 +69,15 @@ class SqlTable(FormatTable):
             expr_join += sub_expr
         return fields, curr_table, expr_join
 
-    def find_all(self, limit=0, filter_expr=''):
-        fields, curr_table, expr_join = self.query_elements()
+    def find_all(self, limit=0, filter_expr='', allow_left_joins=True):
+        if allow_left_joins:
+            field_list, curr_table, expr_join = self.query_elements()
+        else:
+            field_list = list(self.map)
+            curr_table = self.table_name
+            expr_join = ''
         command = 'SELECT {} \nFROM {} {}'.format(
-            ',\n\t'.join(fields),
+            ',\n\t'.join(field_list),
             curr_table,
             expr_join
         )

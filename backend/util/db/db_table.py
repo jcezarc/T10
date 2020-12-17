@@ -69,10 +69,10 @@ class DbTable:
             'BOO': 0,
         }
         result = json.loads(self.validator.dumps(''))
-        pk_field = self.pk_fields[0]
-        key_type = self.map[pk_field][:3]
-        if pk_field not in result:
-            result[pk_field] = DEFAULT_VALUES[key_type]
+        for field in self.required_fields:
+            key_type = self.map[field][:3]
+            if field not in result:
+                result[field] = DEFAULT_VALUES[key_type]
         return result
 
     def is_quoted(self, field):

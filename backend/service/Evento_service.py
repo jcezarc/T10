@@ -1,4 +1,6 @@
+import uuid
 import logging
+from datetime import datetime
 from model.Evento_model import EventoModel, NOME_SITUACAO, NIVEL_SOLICITAR
 from util.messages import (
     resp_error,
@@ -40,10 +42,11 @@ class EventoService:
         '''
         found = self.table.find_all(
             20,
-            'usuario = "{}" OR situacao < {}'.format(
+            "usuario = '{}' OR situacao < {}".format(
                 user['cpf_cnpj'],
                 user['nivel']
-            )
+            ),
+            allow_left_joins=False
         )
         if not found:
             return resp_not_found()
@@ -61,11 +64,17 @@ class EventoService:
             ))
         solicitacao = json_data.get('solicitacao')
         if new_level > NIVEL_SOLICITAR:
-            found = self.table.find_one({
-                'solicitacao': solicitacao
-            })
+            found = self.table.find_all(
+                1,
+                f"solicitacao = '{solicitacao}'",
+                allow_left_joins=False
+            )
             if not found:
-                return resp_error('Não existe nada para '+NOME_SITUACAO[new_level])
+                return resp_error(
+                    'Não existe nada para {}r'.format(
+                        NOME_SITUACAO[new_level]
+                    )
+                )
         elif isinstance(solicitacao, dict):
             # --- No evento de fazer solicitação, grava os detalhes na tabela Solicitacao
             service = SolicitacaoService()
@@ -73,7 +82,15 @@ class EventoService:
             if status_code == 400:
                 return msg, status_code
         json_data['usuario'] = user['cpf_cnpj']
+        json_data['id'] = str(uuid.uuid4())
+        today = datetime.today()
+        json_data['dt_evento'] = today.strftime('%Y-%m-%d')
         errors = self.table.insert(json_data)
         if errors:
+            print('='*100)
+            print(json_data)
+            print('-'*100)
+            print('Erros:')
+            print(errors)
             return resp_error(errors)
         return resp_post_ok(json_data)

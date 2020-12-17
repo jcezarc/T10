@@ -32,7 +32,7 @@ class PessoaService:
         logging.info('Gravando nova Pessoa')
         user = self.user
         def get_level(record):
-            return record.get('nivel', 1)
+            return int(record.get('nivel', 1))
         if get_level(json_data) > get_level(user):
             return resp_error('Você não pode criar um usuário com nível maior que o seu.')
         errors = self.table.insert(json_data)

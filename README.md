@@ -41,8 +41,6 @@ Este projeto demonstra funções básicas de uma API para acompanhamento de soli
 ![](./doc/Swagger.png)
 
 * `/T10/Pessoa` Pode ser usado para trazer várias pessoas (onde você pode passar uma query com os nomes dos campos, p.ex.: `...?nome=PESSOAxyz`)
-    * você pode também passar o `.../<cpf_cnpj>` para operações que exigem um registro único
-    (consula por campo chave ou exclusão)
 
 * `/T10/Evento` Permite gravar ou consultar um evento, de acordo com as permissões do usuário.
 
@@ -56,8 +54,6 @@ As seguintes situações foram testadas para verificar se cada serviço está fu
 * Sucesso na busca: Retorna o registro relacionado ao campo chave usado na busca;
 * Falha de inclusão: Não permite registro com campos inválidos;
 * Sucesso na inclusão: Simula a gravação de um registro e retorna sem erros;
-* Falha na alteração: Não permite registro com campos inválidos;
-* Sucesso na alteração: Altera o registro, localiza ele no banco de dados e compara com o esperado.
 
 
 ![](./doc/testes_unitarios.png)
@@ -80,10 +76,9 @@ Com a API rodando, o roteiro abaixo é executado, usando-se o comando `python si
 7) P1 faz nova solicitação (S2)
 8) P1 consulta seus eventos -- Deve retornar S1 e S2
 9) P2 aprova S2
-10) P1 consulta seus eventos aprovados -- Deve retornar somente S2
-11) P2 tenta criar uma pessoa com nível 4, mas vai falhar (porque é um nível acima do de P2)
-12) P3 cancela S2
-13) P3 tenta aprovar S3 (que não existe) então falha.
-14) P3 cria S3
-15) Repete o passo 8 e a resposta deve ser a mesma.
-16) P3 consulta todos os eventos -- Deve retornar S1, S2 e S3
+10) P2 tenta criar uma pessoa com nível 4, mas vai falhar (porque é um nível acima do de P2)
+11) P3 cancela S2
+12) P2 tenta aprovar S3 (que não existe) então falha.
+13) P2 cria a solicitação S3
+14) Repete o passo 8 e a resposta deve ser a mesma.
+15) P3 consulta todos os eventos -- Deve retornar S1, S2 e S3

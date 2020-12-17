@@ -23,9 +23,12 @@ def decode_user(access_key):
     user_id = base64.b64decode(
         bytes(access_key, CHAR_CODE)
     ).decode(CHAR_CODE)
-    return json.loads(
+    result = json.loads(
         user_id.replace("'", '"')
     )
+    if isinstance(result, list):
+        result = result[0]
+    return result
 
 def valid_user(user, password):
     service = PessoaService()
