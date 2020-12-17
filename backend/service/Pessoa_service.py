@@ -15,6 +15,7 @@ class PessoaService:
             self.table = table
         else:
             self.table = get_table(PessoaModel)
+        self.table.ignored_fields = ['senha']
         self.user = user
 
     def find(self, params):

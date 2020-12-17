@@ -43,37 +43,11 @@ class SqlTable(FormatTable):
         self.session.execute(command)
         self.session.commit()
 
-    def query_elements(self, prefix='', source=''):
-        a = self.alias
-        fields = [f'{a}.{f} as {prefix}{f}' for f in self.map]
-        curr_table = '{} {}'.format(self.table_name, self.alias)
-        expr_join = ''
-        for field in self.joins:
-            join = self.joins[field]
-            join_fields, join_table, join_left = join.query_elements(
-                prefix+join.alias+'__', expr_join
-            )
-            join_primary_key = join.alias + '.' + join.pk_fields[0]
-            if join_primary_key in join_fields:
-                join_fields.remove(join_primary_key)
-            header = 'LEFT JOIN {} '.format(join_table)
-            if header in source or header in expr_join:
-                continue
-            sub_expr = '\n\t{}ON ({}.{} = {}){}'.format(
-                header,
-                self.alias, field,
-                join_primary_key,
-                join_left
-            )
-            fields += join_fields
-            expr_join += sub_expr
-        return fields, curr_table, expr_join
-
     def find_all(self, limit=0, filter_expr='', allow_left_joins=True):
         if allow_left_joins:
             field_list, curr_table, expr_join = self.query_elements()
         else:
-            field_list = list(self.map)
+            field_list = self.allowed_fields()
             curr_table = self.table_name
             expr_join = ''
         command = 'SELECT {} \nFROM {} {}'.format(

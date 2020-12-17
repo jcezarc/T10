@@ -45,8 +45,9 @@ class MongoTable(DbTable):
 
     def get_node(self, record):
         result = {}
+        field_list = self.allowed_fields()
         for field, value in record.items():
-            if field not in self.map:
+            if field not in field_list:
                 continue
             result[field] = value
         return result

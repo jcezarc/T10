@@ -123,11 +123,7 @@ class FormatTable(DbTable):
         return result
 
     def query_elements(self, prefix='', source=''):
-        a = self.alias
-        if prefix:
-            fields = [f'{a}.{f} as {prefix}{f}' for f in self.map]
-        else:
-            fields = [f'{a}.{f}' for f in self.map]
+        fields = self.allowed_fields(self.alias, prefix)
         curr_table = '{} {}'.format(self.table_name, self.alias)
         expr_join = ''
         for field in self.joins:

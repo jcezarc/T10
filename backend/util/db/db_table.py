@@ -31,6 +31,7 @@ class DbTable:
         field_defs = self.validator.declared_fields
         self.pk_fields = []
         self.map = {}
+        self.ignored_fields = []
         self.required_fields = []
         self.new_condition_event = {
             # field : <<callback function>>
@@ -59,6 +60,16 @@ class DbTable:
             elif is_primary_key:
                 self.pk_fields.append(field_name)
             self.map[field_name] = field_type
+
+    def allowed_fields(self, alias='', prefix=''):
+        a = alias
+        p = prefix
+        is_valid = lambda f: f not in self.ignored_fields
+        if prefix:
+            return [f'{a}.{f} as {p}{f}' for f in self.map if is_valid(f)]
+        if alias:
+            return [f'{a}.{f}' for f in self.map if is_valid(f)]
+        return [f'{f}' for f in self.map if is_valid(f)]
 
     def default_values(self):
         DEFAULT_VALUES = {
