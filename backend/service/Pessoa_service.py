@@ -10,30 +10,27 @@ from util.messages import (
 from service.db_connection import get_table
 
 class PessoaService:
-    def __init__(self, table=None):
+    def __init__(self, table=None, user=None):
         if table:
             self.table = table
         else:
             self.table = get_table(PessoaModel)
+        self.user = user
 
-    def find(self, params, cpf_cnpj=None):
-        if cpf_cnpj is None:
-            logging.info('Finding all records of Pessoa...')
-            found = self.table.find_all(
-                20,
-                self.table.get_conditions(params, False)
-            )
-        else:
-            logging.info(f'Finding "{cpf_cnpj}" in Pessoa ...')
-            found = self.table.find_one([cpf_cnpj])
+    def find(self, params):
+        logging.info('Procurando Pessoas...')
+        found = self.table.find_all(
+            20,
+            self.table.get_conditions(params, False)
+        )
         if not found:
             return resp_not_found()
         return resp_get_ok(found)
 
 
-    def insert(self, json_data, user):
+    def insert(self, json_data):
         logging.info('Gravando nova Pessoa')
-
+        user = self.user
         def get_level(record):
             return record.get('nivel', 1)
         if get_level(json_data) > get_level(user):
@@ -41,4 +38,4 @@ class PessoaService:
         errors = self.table.insert(json_data)
         if errors:
             return resp_error(errors)
-        return resp_post_ok()
+        return resp_post_ok(json_data)

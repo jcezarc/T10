@@ -1,12 +1,12 @@
 import sys
 sys.path.append('..')
 from service.Evento_service import EventoService
-from model.Evento_model import EventoModel, PK_DEFAULT_VALUE
+from model.Evento_model import EventoModel
 from util.db.lite_table import LiteTable
 from util.tester import Tester
 
 
-def get_service():
+def get_service(user):
     table = LiteTable(
         EventoModel, {
             'database': Tester.temp_file()
@@ -14,7 +14,7 @@ def get_service():
         }
     )
     table.create_table()
-    return EventoService(table)
+    return EventoService(table, user)
 
 def test_find_success():
     test = Tester(get_service)

@@ -61,7 +61,19 @@ class DbTable:
             self.map[field_name] = field_type
 
     def default_values(self):
-        return json.loads(self.validator.dumps(''))
+        DEFAULT_VALUES = {
+            'INT': 0, 
+            'FLO': 0, 
+            'DAT': '"2020-12-17"', 
+            'VAR': '"000"', 
+            'BOO': 0,
+        }
+        result = json.loads(self.validator.dumps(''))
+        pk_field = self.pk_fields[0]
+        key_type = self.map[pk_field][:3]
+        if pk_field not in result:
+            result[pk_field] = DEFAULT_VALUES[key_type]
+        return result
 
     def is_quoted(self, field):
         return self.map[field][:7] in ["VARCHAR", "DATE"]

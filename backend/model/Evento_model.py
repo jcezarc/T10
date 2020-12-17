@@ -12,10 +12,10 @@ NIVEL_REJEITAR = 3
 NIVEL_CANCELAR = 4
 
 NOME_SITUACAO = {
-    NIVEL_SOLICITAR: 'Fazer solicitação',
-    NIVEL_APROVACAO: 'Aprovar',
-    NIVEL_REJEITAR: 'Rejeitar',
-    NIVEL_CANCELAR: 'Cancelar',
+    NIVEL_SOLICITAR: 'Solicita',
+    NIVEL_APROVACAO: 'Aprova',
+    NIVEL_REJEITAR: 'Rejeita',
+    NIVEL_CANCELAR: 'Cancela',
 }
 
 
@@ -26,6 +26,6 @@ class EventoModel(Schema):
         required=True
     )
     dt_evento = Date(default=datetime.today())
-    situacao = Integer()
+    situacao = Integer(default=1)
     solicitacao = Nested(SolicitacaoModel)
     usuario = Nested(PessoaModel)

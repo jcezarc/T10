@@ -25,10 +25,8 @@ class EventoResource(Resource):
 
         #Consulta
         """
-        service = EventoService()
-        return service.find(
-            self.current_user()
-        )
+        service = EventoService(user=self.current_user())
+        return service.find(None)
 
     @jwt_required
     def post(self):
@@ -45,6 +43,5 @@ class EventoResource(Resource):
         #Gravação
         """
         req_data = request.get_json()
-        user = self.current_user()
-        service = EventoService()
-        return service.insert(req_data, user)
+        service = EventoService(user=self.current_user())
+        return service.insert(req_data)

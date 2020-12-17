@@ -10,9 +10,9 @@ from flask_jwt_extended import create_access_token, JWTManager
 from resource.user_controller import valid_user
 from util.swagger_generator import FlaskSwaggerGenerator
 from model.Pessoa_model import PessoaModel
-from resource.Pessoa import PessoaResource
+from resource.Pessoa_resource import PessoaResource
 from model.Evento_model import EventoModel
-from resource.Evento import EventoResource
+from resource.Evento_resource import EventoResource
 
 
 BASE_PATH = '/T10'

@@ -111,7 +111,7 @@ class LiteTable(FormatTable):
             return None
         for field, value in json_data.items():
             field = field.split('.')[-1]
-            if field in self.joins:
+            if field in self.joins and isinstance(value, dict):
                 join = self.joins[field]
                 errors = join.insert(value)
                 if errors:

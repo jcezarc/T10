@@ -21,14 +21,25 @@ class Tester:
             str(uuid.uuid4())+'.db'
         )
 
+    @staticmethod
+    def test_user():
+        return {
+            'cpf_cnpj': '000',
+            'nome': 'Test user',
+            'email': 'test@test.com',
+            'senha': '000',
+            'nivel': 5,
+        }
+
     def status_of_find(self, insert_before=False):
-        service = self.callback()
+        service = self.callback(
+            user=self.test_user()
+        )
         if insert_before:
             data = add_record(service)[0]['data']
         else:
             data = service.table.default_values()
-        key = service.table.pk_fields[0]
-        return service.find(None, data[key])[1]
+        return service.find(data)[1]
 
     def find_success(self):
         status_code = self.status_of_find(insert_before=True)
@@ -39,11 +50,15 @@ class Tester:
         assert self.status_of_find() == 404
 
     def insert_success(self):
-        service = self.callback()
+        service = self.callback(
+            user=self.test_user()
+        )
         status_code = add_record(service)[1]
         assert status_code == 201
 
     def insert_failure(self):
-        service = self.callback()
+        service = self.callback(
+            user=self.test_user()
+        )
         status_code = service.insert({})[1]
         assert status_code == 400

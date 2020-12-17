@@ -71,7 +71,19 @@ Com a API rodando, o roteiro abaixo é executado, usando-se o comando `python si
 
 #### **Roteiro de testes:**
 
-1)
-2)
-3)
-...
+1) Admin cria a pessoa 1 (P1)
+2) ...cria a pessoa 2 (P2) com nível para rejeitar
+3) ...cria a pessoa 3 (P3) com nível para cancelar
+4) P1 faz a solicitação 1 (S1)
+5) P1 tenta aprovar S1, mas deve falhar;
+6) P2 rejeita S1
+7) P1 faz nova solicitação (S2)
+8) P1 consulta seus eventos -- Deve retornar S1 e S2
+9) P2 aprova S2
+10) P1 consulta seus eventos aprovados -- Deve retornar somente S2
+11) P2 tenta criar uma pessoa com nível 4, mas vai falhar (porque é um nível acima do de P2)
+12) P3 cancela S2
+13) P3 tenta aprovar S3 (que não existe) então falha.
+14) P3 cria S3
+15) Repete o passo 8 e a resposta deve ser a mesma.
+16) P3 consulta todos os eventos -- Deve retornar S1, S2 e S3

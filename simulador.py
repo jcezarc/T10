@@ -87,8 +87,8 @@ class Simulador:
         self.dispara_evento(EV_SOLICITAR, 'S1', 'P1', 201)
         self.dispara_evento(EV_APROVACAO, 'S1', 'P1', 400)
         self.dispara_evento(EV_REJEITAR, 'S1', 'P2', 201)
-        self.dispara_evento(EV_SOLICITAR, 'S3', 'P1', 201)
-        self.dispara_evento(EV_APROVACAO, 'S3', 'P2', 201)
+        self.dispara_evento(EV_SOLICITAR, 'S2', 'P1', 201)
+        self.dispara_evento(EV_APROVACAO, 'S2', 'P2', 201)
         
 
 

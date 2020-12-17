@@ -1,12 +1,12 @@
 import sys
 sys.path.append('..')
 from service.Solicitacao_service import SolicitacaoService
-from model.Solicitacao_model import SolicitacaoModel, PK_DEFAULT_VALUE
+from model.Solicitacao_model import SolicitacaoModel
 from util.db.lite_table import LiteTable
 from util.tester import Tester
 
 
-def get_service():
+def get_service(user):
     table = LiteTable(
         SolicitacaoModel, {
              'database': ':memory:'

@@ -16,23 +16,19 @@ class SolicitacaoService:
         else:
             self.table = get_table(SolicitacaoModel)
 
-    def find(self, params, id=None):
-        if id is None:
-            logging.info('Finding all records of Solicitacao...')
-            found = self.table.find_all(
-                20,
-                self.table.get_conditions(params, False)
-            )
-        else:
-            logging.info(f'Finding "{id}" in Solicitacao ...')
-            found = self.table.find_one([id])
+    def find(self, params):
+        logging.info('Procurando Solicitações...')
+        found = self.table.find_all(
+            20,
+            self.table.get_conditions(params, False)
+        )
         if not found:
             return resp_not_found()
         return resp_get_ok(found)
 
-    def insert(self, json):
+    def insert(self, json_data):
         logging.info('New record write in Solicitacao')
-        errors = self.table.insert(json)
+        errors = self.table.insert(json_data)
         if errors:
             return resp_error(errors)
-        return resp_post_ok()
+        return resp_post_ok(json_data)
