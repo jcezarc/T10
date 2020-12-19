@@ -20,7 +20,15 @@ Este projeto demonstra funções básicas de uma API para acompanhamento de soli
 ![](./doc/banco_de_dados.png)
 
 ---
-* ### Como rodar:
+### Bibliotecas de terceiros
+* Todos os DAO´s foram **feitos por mim**!
+* Marshmallow para modelagem;
+* Flask restful para as rotas;
+* SQLAlchemy;
+* Faker para dados de testes.
+
+---
+### Como rodar:
     * Execute os scripts da pasta SQL no banco "T10" do seu servidor
     * Configure as variáveis de ambiente no seu sistema operacional -- Exemplo:
         - `SET T10_USER=root`
